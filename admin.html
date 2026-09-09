@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Aiverta — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--paper:#fff;--card:#fafaf8;--ink:#0a0a0a;--ink-soft:#57564f;--ink-faint:#a8a69f;--hairline:#e4e2dd;--hairline-strong:#cfccc4;--good:#2e7d46;--warn:#b3791f;--bad:#b3261e;--neutral:#57564f}
+body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+.mono{font-family:'IBM Plex Mono',monospace}
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;height:100vh;background:#fff}
+#dashboard{display:none}
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid var(--hairline)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-logo{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;letter-spacing:.12em;color:var(--ink)}
+.brand-divider{width:1px;height:16px;background:var(--hairline-strong)}
+.brand-title{font-size:14px;font-weight:400;color:var(--ink-soft);letter-spacing:.06em}
+.stamp{font-size:12px;color:var(--ink-faint)}
+/* WRAP */
+.wrap{max-width:1200px;margin:0 auto;padding:28px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--hairline);border-radius:12px;padding:14px 16px}
+.stat-card .num{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink)}
+.stat-card .lbl{font-size:12px;color:var(--ink-soft);margin-top:2px}
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:6px 14px;font-size:12.5px;font-weight:400;border:1px solid var(--hairline-strong);border-radius:100px;background:var(--paper);cursor:pointer;color:var(--ink-soft);transition:all .12s}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--hairline-strong);border-radius:100px;padding:7px 14px;min-width:200px}
+.search input{border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;width:100%;background:transparent;color:var(--ink)}
+.search input::placeholder{color:var(--ink-faint)}
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+thead th{text-align:left;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);padding:0 12px 10px;border-bottom:1px solid var(--hairline-strong)}
+tbody tr.lead-row{cursor:pointer;border-bottom:1px solid var(--hairline);transition:background .1s}
+tbody tr.lead-row:hover{background:var(--card)}
+tbody td{padding:13px 12px;font-size:13.5px;vertical-align:middle}
+td.name-cell{font-weight:500}
+td.name-cell .biz{font-weight:300;color:var(--ink-soft);font-size:12px;margin-top:2px}
+td.services-cell{color:var(--ink-soft);font-size:12px;max-width:160px}
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:400;padding:4px 10px;border-radius:100px}
+.pill .dot{width:6px;height:6px;border-radius:50%}
+.pill.completed{background:#e8f3ea;color:var(--good)}.pill.completed .dot{background:var(--good)}
+.pill.progress{background:#fdf1e0;color:var(--warn)}.pill.progress .dot{background:var(--warn);animation:pulse 1.4s infinite}
+.pill.missed{background:#fbeae9;color:var(--bad)}.pill.missed .dot{background:var(--bad)}
+.pill.scheduled{background:#eeeeec;color:var(--neutral)}.pill.scheduled .dot{background:var(--neutral)}
+.pill.pending{background:#eeeeec;color:var(--neutral)}.pill.pending .dot{background:var(--neutral)}
+.pill.calling{background:#fdf1e0;color:var(--warn)}.pill.calling .dot{background:var(--warn);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* CHEVRON */
+.chev{color:var(--ink-faint);transition:transform .15s}
+tr.lead-row.expanded .chev{transform:rotate(90deg);color:var(--ink)}
+/* DETAIL ROW */
+tr.detail-row{display:none}
+tr.detail-row.show{display:table-row}
+tr.detail-row td{padding:0;border-bottom:1px solid var(--hairline)}
+.detail-panel{display:grid;grid-template-columns:1.4fr 1fr;background:var(--card);padding:20px 22px 24px;gap:0}
+.transcript{padding-right:22px;border-right:1px solid var(--hairline)}
+.transcript h4,.summary h4{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin:0 0 12px}
+.bubble{max-width:84%;margin-bottom:9px;padding:9px 13px;border-radius:10px;font-size:13px;line-height:1.5}
+.bubble.ai{background:var(--paper);border:1px solid var(--hairline-strong)}
+.bubble.lead{background:var(--ink);color:#fff;margin-left:auto}
+.bubble .who{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;opacity:.5;margin-bottom:3px}
+.summary{padding-left:22px}
+.form-details{margin-bottom:16px}
+.form-details h4{margin-bottom:10px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-bottom:14px}
+.detail-item .k{font-size:11px;color:var(--ink-faint);margin-bottom:2px}
+.detail-item .v{font-size:13px;font-weight:400;color:var(--ink)}
+.services-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.stag{font-size:11px;padding:3px 8px;border:1px solid var(--hairline-strong);border-radius:4px;color:var(--ink-soft)}
+.brief-box{font-size:13px;line-height:1.6;color:var(--ink-soft);background:var(--paper);border:1px solid var(--hairline);padding:10px 12px;margin-top:4px;font-style:italic}
+.divider-v{height:0.5px;background:var(--hairline);margin:14px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.action-btn{font-size:12px;font-weight:400;padding:8px 14px;border-radius:8px;border:1px solid var(--hairline-strong);background:var(--paper);cursor:pointer;color:var(--ink-soft);transition:border-color .15s}
+.action-btn:hover{border-color:var(--ink);color:var(--ink)}
+.action-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.action-btn.primary:hover{opacity:.85}
+.empty{text-align:center;padding:48px;color:var(--ink-faint);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div style="text-align:center">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:.12em;margin-bottom:8px;color:#0a0a0a">STUDIO AIVERTA</div>
+    <div style="font-size:12px;color:#a8a69f;letter-spacing:.08em;margin-bottom:32px;text-transform:uppercase">Lead Intelligence</div>
+    <div style="display:flex;gap:0">
+      <input id="passInput" type="password" placeholder="Enter password" style="border:1px solid #e4e2dd;border-right:none;padding:11px 16px;font-size:13px;outline:none;width:220px;font-family:'Inter',sans-serif;color:#0a0a0a">
+      <button onclick="checkPass()" style="padding:11px 20px;background:#0a0a0a;color:#fff;border:none;cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;letter-spacing:.06em">Enter</button>
+    </div>
+    <div id="passErr" style="color:#b3261e;font-size:12px;margin-top:10px;display:none">Incorrect password</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header>
+    <div class="brand">
+      <div class="brand-logo">STUDIO AIVERTA</div>
+      <div class="brand-divider"></div>
+      <div class="brand-title">Lead Intelligence</div>
+    </div>
+    <div class="stamp" id="stamp"></div>
+  </header>
+
+  <div class="wrap">
+    <div class="stats-row">
+      <div class="stat-card"><div class="num" id="stat-total">—</div><div class="lbl">Leads today</div></div>
+      <div class="stat-card"><div class="num" id="stat-completed">—</div><div class="lbl">Calls completed</div></div>
+      <div class="stat-card"><div class="num" id="stat-qualified">—</div><div class="lbl">Qualified</div></div>
+      <div class="stat-card"><div class="num" id="stat-pipeline">—</div><div class="lbl">Pipeline value</div></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="filters">
+        <div class="chip active" data-filter="all">All</div>
+        <div class="chip" data-filter="completed">Completed</div>
+        <div class="chip" data-filter="progress">In progress</div>
+        <div class="chip" data-filter="missed">Missed</div>
+        <div class="chip" data-filter="scheduled">Scheduled</div>
+      </div>
+      <div class="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#a8a69f" stroke-width="2"/><path d="M21 21l-4-4" stroke="#a8a69f" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" id="srch" placeholder="Search name, phone, business…">
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Lead</th><th>Phone</th><th>Services</th><th>Budget</th>
+          <th>Timeline</th><th>Status</th><th>Duration</th><th>Time</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const BACKEND_URL ='https://studio-aiverta-backend-1.onrender.com';
+const ADMIN_KEY   = 'sa_admin_k9x2mq7v';
+let allLeads = [];
+let filter = 'all', search = '';
+
+function checkPass() {
+  if (document.getElementById('passInput').value === 'aiverta2026') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadLeads();
+  } else {
+    document.getElementById('passErr').style.display = 'block';
+  }
+}
+document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPass(); });
+
+async function loadLeads() {
+  try {
+    const res  = await fetch(`${BACKEND_URL}/admin/leads`, { headers: { 'x-admin-key': ADMIN_KEY } });
+    const data = await res.json();
+    allLeads   = data.leads || [];
+    document.getElementById('stat-total').textContent     = data.stats?.total     ?? '—';
+    document.getElementById('stat-completed').textContent = data.stats?.completed  ?? '—';
+    document.getElementById('stat-qualified').textContent = data.stats?.qualified  ?? '—';
+    document.getElementById('stat-pipeline').textContent  = data.stats?.pipeline   ?? '—';
+    render();
+  } catch (err) {
+    console.error('Failed to load leads:', err);
+  }
+}
+setInterval(loadLeads, 30000);
+
+const statusMeta = {
+  completed: {label:'Completed',  cls:'completed'},
+  progress:  {label:'In progress',cls:'progress'},
+  missed:    {label:'Missed',     cls:'missed'},
+  scheduled: {label:'Scheduled',  cls:'scheduled'},
+  pending:   {label:'Pending',    cls:'pending'},
+  calling:   {label:'Calling',    cls:'calling'},
+  failed:    {label:'Failed',     cls:'missed'}
+};
+
+function render() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  const rows = allLeads.filter(l => {
+    const mf = filter === 'all' || l.status === filter;
+    const q  = search.toLowerCase();
+    const ms = !q || (l.name||'').toLowerCase().includes(q) || (l.biz||'').toLowerCase().includes(q) || (l.phone||'').replace(/\D/g,'').includes(q.replace(/\D/g,''));
+    return mf && ms;
+  });
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty">No leads found</div></td></tr>`;
+    return;
+  }
+
+  rows.forEach(l => {
+    const m      = statusMeta[l.status] || {label: l.status, cls: 'scheduled'};
+    const svcTxt = (l.services||[]).slice(0,2).join(', ') + ((l.services||[]).length > 2 ? ` +${l.services.length-2}` : '');
+    const row    = document.createElement('tr');
+    row.className    = 'lead-row';
+    row.dataset.id   = l.id;
+    row.innerHTML = `
+      <td class="name-cell">${l.name||'—'}${l.biz ? `<div class='biz'>${l.biz}</div>` : ''}</td>
+      <td class="mono" style="font-size:13px;color:var(--ink-soft)">${l.phone||'—'}</td>
+      <td class="services-cell">${svcTxt||'—'}</td>
+      <td style="font-size:13px;color:var(--ink-soft)">${l.budget||'—'}</td>
+      <td style="font-size:13px;color:var(--ink-soft)">${l.timeline||'—'}</td>
+      <td><span class="pill ${m.cls}"><span class="dot"></span>${m.label}</span></td>
+      <td class="mono" style="font-size:13px;color:var(--ink-soft)">${l.duration||'—'}</td>
+      <td class="mono" style="font-size:13px;color:var(--ink-soft)">${l.time||'—'}</td>
+      <td><svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+    `;
+
+    const svcTagsHtml = (l.services||[]).map(s=>`<span class="stag">${s}</span>`).join('');
+    const transcript  = l.transcript || [];
+    const summary     = l.summary    || {};
+    const bubbles     = transcript.map(t=>`<div class="bubble ${t.who}"><span class="who">${t.who==='ai'?'Aiva':l.name}</span>${t.text}</div>`).join('') || '<div style="color:var(--ink-faint);font-size:13px">No transcript yet</div>';
+    const summItems   = Object.entries(summary).map(([k,v])=>`<div class="detail-item"><div class="k">${k.charAt(0).toUpperCase()+k.slice(1)}</div><div class="v">${v}</div></div>`).join('') || '<div style="color:var(--ink-faint);font-size:13px">Pending summary</div>';
+
+    const det = document.createElement('tr');
+    det.className = 'detail-row';
+    det.innerHTML = `<td colspan="9"><div class="detail-panel">
+      <div class="transcript"><h4>Call transcript</h4>${bubbles}</div>
+      <div class="summary">
+        <div class="form-details">
+          <h4>Form submission</h4>
+          <div class="detail-grid">
+            <div class="detail-item"><div class="k">Name</div><div class="v">${l.name||'—'}</div></div>
+            <div class="detail-item"><div class="k">Business</div><div class="v">${l.biz||'—'}</div></div>
+            <div class="detail-item"><div class="k">Budget</div><div class="v">${l.budget||'—'}</div></div>
+            <div class="detail-item"><div class="k">Timeline</div><div class="v">${l.timeline||'—'}</div></div>
+          </div>
+          <div class="detail-item"><div class="k">Services</div><div class="services-tags" style="margin-top:5px">${svcTagsHtml||'—'}</div></div>
+          ${l.brief?`<div class="detail-item" style="margin-top:10px"><div class="k">Brief</div><div class="brief-box">${l.brief}</div></div>`:''}
+        </div>
+        <div class="divider-v"></div>
+        <h4>AI summary</h4>
+        <div class="detail-grid">${summItems}</div>
+        <div class="actions">
+          <button class="action-btn primary">Mark qualified</button>
+          <button class="action-btn">Schedule follow-up</button>
+        </div>
+      </div>
+    </div></td>`;
+
+    row.addEventListener('click', () => {
+      const open = det.classList.contains('show');
+      document.querySelectorAll('tr.detail-row.show').forEach(r=>r.classList.remove('show'));
+      document.querySelectorAll('tr.lead-row.expanded').forEach(r=>r.classList.remove('expanded'));
+      if (!open) { det.classList.add('show'); row.classList.add('expanded'); }
+    });
+
+    tbody.appendChild(row);
+    tbody.appendChild(det);
+  });
+}
+
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    filter = c.dataset.filter;
+    render();
+  });
+});
+document.getElementById('srch').addEventListener('input', e => { search = e.target.value; render(); });
+function tick() { document.getElementById('stamp').textContent = 'Last updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+tick(); setInterval(tick, 30000);
+</script>
+</body>
+</html>

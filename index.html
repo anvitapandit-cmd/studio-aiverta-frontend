@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Aiverta</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --white:#ffffff;
+  --off:#fafafa;
+  --light:#f5f5f3;
+  --border:#e8e8e4;
+  --border-dark:#d0d0ca;
+  --ink:#0a0a0a;
+  --ink-mid:#3a3a3a;
+  --ink-muted:#8a8a82;
+  --ink-faint:#c4c4bc;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--ink);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.94);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);padding:0 4rem}
+.nav-inner{max-width:1280px;margin:0 auto;height:68px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;letter-spacing:0.12em;color:var(--ink)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:12px;font-weight:400;letter-spacing:0.12em;color:var(--ink-muted);text-decoration:none;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;padding:10px 24px;border:0.5px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer;transition:all 0.25s;font-family:'Inter',sans-serif}
+.nav-cta:hover{background:var(--ink);color:var(--white)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 4rem 80px;text-align:center;position:relative;overflow:hidden;background:none;perspective:1400px}
+.hero-metal-bg{position:absolute;inset:-15%;width:130%;height:130%;background-image:url('im.jpg');background-size:cover;background-position:center;animation:metalFloat 10s ease-in-out infinite alternate}
+.hero-metal-ripple{position:absolute;inset:-15%;width:130%;height:130%;background-image:url('im.jpg');background-size:cover;background-position:center;filter:url(#ripple-filter);mix-blend-mode:overlay;opacity:0.5;animation:metalFloat 14s ease-in-out infinite alternate-reverse}
+.hero-metal-sheen{position:absolute;inset:0;background:linear-gradient(118deg,transparent 20%,rgba(255,255,255,0.08) 40%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.08) 60%,transparent 80%);animation:sheenMove 5s ease-in-out infinite alternate;pointer-events:none}
+.hero-metal-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.52) 100%);pointer-events:none}
+.hero-metal-bottom{position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 100%);pointer-events:none}
+.hero-glow{position:absolute;width:480px;height:480px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);transform:translate(-50%,-50%);opacity:0;transition:opacity 0.3s;z-index:1;}
+.hero-parallax{position:absolute;inset:0;width:100%;height:100%;will-change:transform;}
+.hero-content{will-change:transform;}
+@keyframes metalFloat{0%{transform:scale(1.05) translate(0%,0%)}33%{transform:scale(1.10) translate(-2%,1.5%)}66%{transform:scale(1.08) translate(1.5%,-2%)}100%{transform:scale(1.12) translate(-1%,2%)}}
+@keyframes sheenMove{0%{transform:translateX(-80%) skewX(-8deg);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateX(80%) skewX(-8deg);opacity:0}}
+.hero-content{position:relative;z-index:2}
+.hero-eyebrow{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:2.5rem}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,9vw,130px);font-weight:300;line-height:0.92;letter-spacing:-0.01em;color:#fff;margin-bottom:2.5rem}
+.hero-title em{font-style:italic;font-weight:300;color:rgba(255,255,255,0.75)}
+.hero-sub{font-size:15px;font-weight:300;color:rgba(255,255,255,0.65);max-width:440px;margin:0 auto 4rem;line-height:1.8;letter-spacing:0.02em}
+.hero-actions{display:flex;gap:1.5rem;justify-content:center;align-items:center}
+.btn-primary{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 36px;background:var(--ink);color:var(--white);border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s}
+.btn-primary:hover{opacity:0.82}
+.btn-ghost{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 36px;background:transparent;color:rgba(255,255,255,0.8);border:0.5px solid rgba(255,255,255,0.35);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);color:#fff;border-color:#fff}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);display:flex;flex-direction:column;align-items:center;gap:12px}
+.scroll-line{width:0.5px;height:48px;background:rgba(255,255,255,0.3);animation:scrollpulse 2s ease-in-out infinite}
+@keyframes scrollpulse{0%,100%{opacity:0.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+
+/* SECTION LAYOUT */
+section{padding:8rem 4rem;max-width:1280px;margin:0 auto}
+.section-label{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:1.2rem}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,5vw,64px);font-weight:300;line-height:1.05;color:var(--ink);margin-bottom:2rem}
+.section-title em{font-style:italic}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center;max-width:1280px;margin:0 auto;padding:8rem 4rem}
+.about-left .section-title{font-size:clamp(36px,4.5vw,60px)}
+.about-right p{font-size:15px;line-height:1.9;color:var(--ink-mid);font-weight:300;margin-bottom:1.5rem}
+.about-stat-row{display:flex;gap:3rem;margin-top:3rem;padding-top:3rem;border-top:0.5px solid var(--border)}
+.about-stat .num{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--ink)}
+.about-stat .lbl{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-top:4px}
+
+/* SERVICES */
+.services-header{max-width:1280px;margin:0 auto;padding:8rem 4rem 4rem;display:flex;justify-content:space-between;align-items:flex-end}
+.services-intro{max-width:380px;font-size:14px;line-height:1.8;color:var(--ink-muted);font-weight:300}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:0.5px solid var(--border);max-width:1280px;margin:0 auto;padding:0 4rem 8rem}
+.service-card{padding:3rem 2.5rem;border-right:0.5px solid var(--border);border-bottom:0.5px solid var(--border);transition:background 0.3s}
+.service-card:hover{background:var(--off)}
+.service-card:nth-child(4n){border-right:none}
+.service-card:nth-child(5),.service-card:nth-child(6),.service-card:nth-child(7),.service-card:nth-child(8){border-bottom:none}
+.service-num{font-size:11px;letter-spacing:0.18em;color:var(--ink-faint);margin-bottom:1.8rem}
+.service-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--ink);margin-bottom:1rem;line-height:1.2}
+.service-desc{font-size:13px;line-height:1.8;color:var(--ink-muted);font-weight:300}
+.service-tag{display:inline-block;margin-top:1.5rem;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-faint);border-bottom:0.5px solid var(--ink-faint);padding-bottom:2px}
+
+/* PROCESS */
+.process-wrap{background:var(--ink);padding:8rem 4rem}
+.process-inner{max-width:1280px;margin:0 auto}
+.process-inner .section-label{color:rgba(255,255,255,0.35)}
+.process-inner .section-title{color:var(--white)}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:5rem;border-top:0.5px solid rgba(255,255,255,0.12)}
+.process-step{padding:2.5rem 2rem 2.5rem 0;border-right:0.5px solid rgba(255,255,255,0.1)}
+.process-step:last-child{border-right:none}
+.step-n{font-size:11px;letter-spacing:0.18em;color:rgba(255,255,255,0.25);margin-bottom:1.5rem}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);margin-bottom:1rem;line-height:1.2}
+.step-desc{font-size:12px;line-height:1.8;color:rgba(255,255,255,0.45);font-weight:300}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5px;background:var(--border);margin-top:5rem}
+.why-item{background:var(--white);padding:3rem;transition:background 0.3s}
+.why-item:hover{background:var(--off)}
+.why-item-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:0.8rem}
+.why-item-desc{font-size:13px;line-height:1.8;color:var(--ink-muted);font-weight:300}
+
+/* CTA / CONTACT SECTION */
+.cta-section{background:var(--light);padding:10rem 4rem;border-top:0.5px solid var(--border)}
+.cta-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start}
+.cta-left{position:sticky;top:120px}
+.cta-left .section-label{display:block;margin-bottom:1.5rem}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,4.5vw,62px);font-weight:300;line-height:1.05;margin-bottom:1.5rem}
+.cta-title em{font-style:italic}
+.cta-sub{font-size:15px;color:var(--ink-muted);font-weight:300;line-height:1.8;margin-bottom:2.5rem}
+.cta-email-link{font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);text-decoration:none;border-bottom:0.5px solid var(--border-dark);padding-bottom:2px;transition:color 0.2s,border-color 0.2s}
+.cta-email-link:hover{color:var(--ink);border-color:var(--ink)}
+
+/* FORM STYLES */
+.form-card{background:var(--white);border:0.5px solid var(--border)}
+.form-section-inner{padding:2.5rem}
+.form-section-inner + .form-section-inner{border-top:0.5px solid var(--border)}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}
+.field:last-child{margin-bottom:0}
+.field label{font-size:10px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
+
+.field input,
+.field select,
+.field textarea{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  font-weight:300;
+  color:var(--ink);
+  background:var(--off);
+  border:0.5px solid var(--border-dark);
+  padding:11px 13px;
+  outline:none;
+  transition:border-color .2s;
+  appearance:none;
+  -webkit-appearance:none;
+  width:100%;
+}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6' viewBox='0 0 11 6'%3E%3Cpath d='M1 1l4.5 4 4.5-4' stroke='%238a8a82' stroke-width='1.1' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 13px center;
+  padding-right:34px;
+  cursor:pointer;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{border-color:var(--ink)}
+.field input::placeholder,
+.field textarea::placeholder{color:var(--ink-faint)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.7}
+
+/* Services checkboxes */
+.services-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.35rem}
+.svc-opt{display:flex;align-items:center;gap:7px;cursor:pointer;padding:8px 10px;border:0.5px solid var(--border);transition:background 0.2s,border-color 0.2s}
+.svc-opt:hover{background:var(--off);border-color:var(--border-dark)}
+.svc-opt input[type=checkbox]{
+  width:13px;height:13px;
+  border:0.5px solid var(--border-dark);
+  cursor:pointer;margin:0;
+  accent-color:var(--ink);
+  flex-shrink:0;
+}
+.svc-opt span{font-size:12px;color:var(--ink-mid);font-weight:300;letter-spacing:0.02em}
+
+/* Validation */
+.error-msg{font-size:11px;color:#b3261e;margin-top:.25rem;display:none}
+.field.error input,.field.error select,.field.error textarea{border-color:#b3261e}
+.field.error .error-msg{display:block}
+
+/* Submit */
+.submit-btn{
+  width:100%;
+  font-family:'Inter',sans-serif;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  padding:15px 0;
+  background:var(--ink);
+  color:var(--white);
+  border:none;
+  cursor:pointer;
+  font-weight:400;
+  transition:opacity .2s;
+  margin-top:1.75rem;
+}
+.submit-btn:hover{opacity:.82}
+.form-note{font-size:11px;color:var(--ink-faint);text-align:center;margin-top:.9rem;line-height:1.6;font-weight:300}
+
+/* Success */
+.success-state{display:none;padding:4rem 2.5rem;text-align:center}
+.success-icon{font-size:28px;margin-bottom:1.25rem;color:var(--ink)}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--ink);margin-bottom:.75rem}
+.success-sub{font-size:13px;color:var(--ink-muted);font-weight:300;line-height:1.9}
+
+/* FOOTER */
+footer{border-top:0.5px solid var(--border);padding:3rem 4rem;max-width:100%}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:16px;letter-spacing:0.12em;color:var(--ink-muted)}
+.footer-copy{font-size:11px;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--ink)}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .cta-inner{grid-template-columns:1fr;gap:4rem}
+  .cta-left{position:static}
+}
+@media(max-width:900px){
+  nav{padding:0 1.5rem}
+  .nav-links{display:none}
+  .hero{padding:120px 1.5rem 80px}
+  .about-grid{grid-template-columns:1fr;gap:3rem;padding:5rem 1.5rem}
+  .services-header{flex-direction:column;gap:1.5rem;padding:5rem 1.5rem 2rem;align-items:flex-start}
+  .services-grid{grid-template-columns:1fr;padding:0 1.5rem 5rem}
+  .service-card{border-right:none!important}
+  .service-card:nth-child(n){border-bottom:0.5px solid var(--border)}
+  .service-card:last-child{border-bottom:none}
+  .process-wrap{padding:5rem 1.5rem}
+  .process-steps{grid-template-columns:1fr 1fr;gap:2rem}
+  .process-step{border-right:none;padding-right:0}
+  section{padding:5rem 1.5rem}
+  .why-grid{grid-template-columns:1fr}
+  .cta-section{padding:6rem 1.5rem}
+  .field-row{grid-template-columns:1fr}
+  .services-check-grid{grid-template-columns:1fr}
+  footer{padding:2rem 1.5rem}
+  .footer-inner{flex-direction:column;gap:1rem;text-align:center}
+}
+
+.hero-lens{
+  position:absolute;
+  width:220px;height:220px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:3;
+  opacity:0;
+  transform:translate(-50%,-50%);
+  transition:opacity 0.35s ease;
+  border:1px solid rgba(255,255,255,0.4);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.12),
+    inset 0 0 30px rgba(255,255,255,0.12);
+  background-image:url('im.jpg');
+  background-repeat:no-repeat;
+  filter:brightness(1.3) contrast(1.3) saturate(1.35);
+  backdrop-filter:blur(0.3px);
+  will-change:transform,background-position;
+}
+.hero-lens::after{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,255,255,0.45) 0%,transparent 35%,transparent 65%,rgba(255,255,255,0.1) 100%);
+  mix-blend-mode:overlay;
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute;pointer-events:none">
+  <defs>
+    <filter id="ripple-filter">
+      <feTurbulence type="turbulence" baseFrequency="0.008 0.010" numOctaves="3" seed="5" result="noise">
+        <animate attributeName="baseFrequency" values="0.008 0.010;0.013 0.007;0.007 0.013;0.010 0.009;0.008 0.010" dur="9s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="80" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">STUDIO AIVERTA</div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact"><button class="nav-cta">Start a project</button></a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-parallax" id="heroParallax">
+  <div class="hero-metal-bg"></div>
+  <div class="hero-metal-sheen"></div>
+</div>
+  <div class="hero-metal-overlay"></div>
+  <div class="hero-metal-bottom"></div>
+  <div class="hero-glow" id="heroGlow"></div>
+  <div class="hero-lens" id="heroLens"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow reveal">Intelligence · Software · Growth</p>
+    <h1 class="hero-title reveal reveal-delay-1">We build<br><em>what moves</em><br>brands forward.</h1>
+    <p class="hero-sub reveal reveal-delay-2">Custom AI systems, software, apps, and growth engines — built to perform and built to last.</p>
+    <div class="hero-actions reveal reveal-delay-3"></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</div>
+
+<div class="about-grid" id="about">
+  <div class="about-left">
+    <p class="section-label reveal">About the studio</p>
+    <h2 class="section-title reveal reveal-delay-1">A new kind of<br><em>digital studio.</em></h2>
+  </div>
+  <div class="about-right">
+    <p class="reveal reveal-delay-1">Studio Aiverta is a premium technology studio where artificial intelligence meets human craft. We don't offer templates — we build custom AI systems, software, and digital products that think, adapt, and scale with your business.</p>
+    <p class="reveal reveal-delay-2">Founded on the belief that every business deserves great technology, we partner with founders, startups, and established businesses to design, build, and automate — from a simple website to a full AI-powered product.</p>
+    <div class="about-stat-row">
+      <div class="about-stat reveal reveal-delay-1">
+        <div class="num">10+</div>
+        <div class="lbl">Projects Delivered</div>
+      </div>
+      <div class="about-stat reveal reveal-delay-2">
+        <div class="num">3×</div>
+        <div class="lbl">Avg. Growth for Clients</div>
+      </div>
+      <div class="about-stat reveal reveal-delay-3">
+        <div class="num">100%</div>
+        <div class="lbl">Custom Solutions</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="services">
+  <div class="services-header">
+    <div>
+      <p class="section-label reveal">What we do</p>
+      <h2 class="section-title reveal reveal-delay-1">Our <em>services.</em></h2>
+    </div>
+    <p class="services-intro reveal reveal-delay-2">Every service is scoped around your specific goals — from a single automation to a full product build. No packages, no shortcuts.</p>
+  </div>
+  
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">01</div>
+      <div class="service-name">Custom AI Systems</div>
+      <p class="service-desc">Intelligent agents, voice bots, recommendation engines, and custom LLM integrations — built from scratch around your exact business logic.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">02</div>
+      <div class="service-name">Custom Software</div>
+      <p class="service-desc">Bespoke software built for problems off-the-shelf tools can't solve. We architect, build, and ship production-grade systems tailored to your workflow.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">03</div>
+      <div class="service-name">AI Automation & Workflows</div>
+      <p class="service-desc">We eliminate repetitive work with intelligent automation — connecting your tools, triggering smart actions, and building end-to-end pipelines that run without you.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-4">
+      <div class="service-num">04</div>
+      <div class="service-name">Web Apps</div>
+      <p class="service-desc">Full-stack web applications built to scale — from internal tools and SaaS platforms to customer-facing products with complex logic and real-time data.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">05</div>
+      <div class="service-name">Mobile Apps</div>
+      <p class="service-desc">Native and cross-platform mobile apps built with clean architecture. From concept to App Store — we own the entire journey including design and deployment.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">06</div>
+      <div class="service-name">Websites</div>
+      <p class="service-desc">Premium, conversion-focused websites that perform as well as they look. We obsess over speed, UX, and aesthetics — from landing pages to full CMS builds.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">07</div>
+      <div class="service-name">Paid Ads & Growth</div>
+      <p class="service-desc">Precision-targeted Meta and Google campaigns paired with data-led strategy. Every rupee tracked, every campaign optimised for qualified leads and real revenue.</p>
+      <span class="service-tag"></span>
+    </div>
+    <div class="service-card reveal reveal-delay-4">
+      <div class="service-num">08</div>
+      <div class="service-name">IT Support</div>
+      <p class="service-desc">Reliable ongoing tech support — infrastructure setup, troubleshooting, software maintenance, and team onboarding. We keep your systems running so you don't have to think about it.</p>
+      <span class="service-tag">Infrastructure · Maintenance · Support </span>
+    </div>
+  </div>
+</div>
+
+<div class="process-wrap" id="process">
+  <div class="process-inner">
+    <p class="section-label reveal">How we work</p>
+    <h2 class="section-title reveal reveal-delay-1">A refined <em>process.</em></h2>
+    <div class="process-steps">
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-n">01</div>
+        <div class="step-title">Discovery</div>
+        <p class="step-desc">We begin with a deep audit of your brand, goals, and market position. Nothing is built without clarity on where you want to go.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-n">02</div>
+        <div class="step-title">Strategy</div>
+        <p class="step-desc">A custom roadmap is crafted — from tech stack decisions to campaign structures — tailored to your industry and ambitions.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-n">03</div>
+        <div class="step-title">Build</div>
+        <p class="step-desc">Design and development happen in tight collaboration with you. We ship fast, iterate, and refine until the standard is exceeded.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-4">
+        <div class="step-n">04</div>
+        <div class="step-title">Grow</div>
+        <p class="step-desc">Launch is just the beginning. We monitor, optimize, and scale — continuously improving results as your business evolves.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <p class="section-label reveal">Why Studio Aiverta</p>
+  <h2 class="section-title reveal reveal-delay-1">Built different, <em>by design.</em></h2>
+  <div class="why-grid">
+    <div class="why-item reveal reveal-delay-1">
+      <div class="why-item-title">AI-first thinking</div>
+      <p class="why-item-desc">We integrate intelligence into every layer of what we build — not as a feature, but as a foundation. Your business becomes inherently more efficient.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-2">
+      <div class="why-item-title">Zero-template approach</div>
+      <p class="why-item-desc">Every deliverable is built from scratch for your brand. We don't believe in cookie-cutter solutions — your brand deserves its own identity.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-3">
+      <div class="why-item-title">Strategy before execution</div>
+      <p class="why-item-desc">We don't just build — we think. Every project starts with understanding your business deeply before a single line of code is written.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-4">
+      <div class="why-item-title">Results you can measure</div>
+      <p class="why-item-desc">Everything we do is tied to a clear metric. We track, report, and optimize so you always know exactly what your investment is returning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA SECTION WITH FORM -->
+<div class="cta-section" id="contact">
+  <div class="cta-inner">
+
+    <!-- Left: copy -->
+    <div class="cta-left reveal">
+      <span class="section-label">Ready to begin</span>
+      <h2 class="cta-title">Let's build something<br><em>remarkable.</em></h2>
+      <p class="cta-sub">Whether you need a custom AI system, a new product, or better tech infrastructure — we're ready. Fill in your details and our AI assistant will call you within minutes, ready to talk through your project in detail.</p>
+      <a class="cta-email-link" href="mailto:studioaivertaa@gmail.com">studioaivertaa@gmail.com</a>
+    </div>
+
+    <!-- Right: form -->
+    <div class="reveal reveal-delay-2">
+      <div class="form-card" id="formCard">
+
+        <!-- Personal info -->
+        <div class="form-section-inner">
+          <div class="field-row">
+            <div class="field" id="f-name">
+              <label for="fullName">Full name</label>
+              <input type="text" id="fullName" placeholder="Rajesh Kumar" autocomplete="name">
+              <span class="error-msg">Please enter your name</span>
+            </div>
+            <div class="field">
+              <label for="bizName">Business name</label>
+              <input type="text" id="bizName" placeholder="Acme Ventures">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field" id="f-phone">
+              <label for="phone">Phone number</label>
+              <input type="tel" id="phone" placeholder="+91 98000 00000" autocomplete="tel">
+              <span class="error-msg">Please enter a valid phone number</span>
+            </div>
+            <div class="field" id="f-email">
+              <label for="email">Email address</label>
+              <input type="email" id="email" placeholder="you@company.com" autocomplete="email">
+              <span class="error-msg">Please enter a valid email</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div class="form-section-inner">
+          <div class="field">
+            <label>Services interested in</label>
+            <div class="services-check-grid">
+              <label class="svc-opt"><input type="checkbox" value="ai-systems"><span>Custom AI Systems</span></label>
+              <label class="svc-opt"><input type="checkbox" value="custom-software"><span>Custom Software</span></label>
+              <label class="svc-opt"><input type="checkbox" value="ai-automation"><span>AI Automation</span></label>
+              <label class="svc-opt"><input type="checkbox" value="web-apps"><span>Web Apps</span></label>
+              <label class="svc-opt"><input type="checkbox" value="mobile-apps"><span>Mobile Apps</span></label>
+              <label class="svc-opt"><input type="checkbox" value="websites"><span>Websites</span></label>
+              <label class="svc-opt"><input type="checkbox" value="paid-ads"><span>Paid Ads & Growth</span></label>
+              <label class="svc-opt"><input type="checkbox" value="it-support"><span>IT Support</span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget, timeline, brief -->
+        <div class="form-section-inner">
+          <div class="field-row">
+            <div class="field">
+              <label for="budget">Approximate budget</label>
+              <select id="budget">
+                <option value="" disabled selected>Select range</option>
+                <option value="under-50k">Under ₹50,000</option>
+                <option value="50k-1l">₹50,000 – ₹1 Lakh</option>
+                <option value="1l-5l">₹1 Lakh – ₹5 Lakhs</option>
+                <option value="5l-plus">₹5 Lakhs +</option>
+                <option value="discuss">Prefer to discuss</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="timeline">Timeline</label>
+              <select id="timeline">
+                <option value="" disabled selected>Select timeline</option>
+                <option value="asap">ASAP</option>
+                <option value="1month">Within a month</option>
+                <option value="3months">1–3 months</option>
+                <option value="exploring">Just exploring</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="brief">Project brief</label>
+            <textarea id="brief" placeholder="Tell us what you're building or what problem you want solved…"></textarea>
+          </div>
+
+          <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">Request AI call →</button>
+          <p class="form-note">We'll call you within a few minutes. No spam — just a real conversation.</p>
+        </div>
+
+      </div>
+
+      <!-- Success state -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">✦</div>
+        <div class="success-title">You're all set.</div>
+        <p class="success-sub">Expect a call from our AI assistant shortly.<br>It'll speak with you just like a real consultant would.<br><br>Check your email for a summary after the call.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">STUDIO AIVERTA</div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Studio Aiverta</div>
+  </div>
+</footer>
+
+<script>
+  const BACKEND_URL = 'https://studio-aiverta-backend-1.onrender.com'; // ← update after deploy
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) el.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.hero-content .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 150);
+    });
+  });
+
+  async function handleSubmit() {
+    let valid = true;
+    const name  = document.getElementById('fullName');
+    const phone = document.getElementById('phone');
+    const email = document.getElementById('email');
+    const fn = document.getElementById('f-name');
+    const fp = document.getElementById('f-phone');
+    const fe = document.getElementById('f-email');
+
+    fn.classList.remove('error');
+    fp.classList.remove('error');
+    fe.classList.remove('error');
+
+    if (!name.value.trim()) { fn.classList.add('error'); valid = false; }
+    if (!phone.value.trim() || phone.value.replace(/\D/g,'').length < 7) { fp.classList.add('error'); valid = false; }
+    if (!email.value.includes('@') || !email.value.includes('.')) { fe.classList.add('error'); valid = false; }
+
+    if (!valid) return;
+
+    const services = [...document.querySelectorAll('.svc-opt input:checked')].map(el => el.value);
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: name.value.trim(),
+          bizName:  document.getElementById('bizName').value.trim(),
+          phone:    phone.value.trim(),
+          email:    email.value.trim(),
+          services,
+          budget:   document.getElementById('budget').value,
+          timeline: document.getElementById('timeline').value,
+          brief:    document.getElementById('brief').value.trim()
+        })
+      });
+
+      if (!res.ok) throw new Error('Server error');
+
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Request AI call →';
+      alert('Something went wrong. Please email us at studioaivertaa@gmail.com');
+    }
+  }
+
+const heroEl = document.querySelector('.hero');
+const heroParallax = document.getElementById('heroParallax');
+const heroContentEl = document.getElementById('heroContent');
+const glow = document.getElementById('heroGlow');
+const lens = document.getElementById('heroLens');
+
+let targetX = 0, targetY = 0, curX = 0, curY = 0;
+let mouseXpx = 0, mouseYpx = 0, glowX = 0, glowY = 0;
+let lensX = 0, lensY = 0;
+let hovering = false;
+
+const LENS_SIZE = 220;
+const LENS_ZOOM = 2.4;
+
+heroEl.addEventListener('mousemove', (e) => {
+  const rect = heroEl.getBoundingClientRect();
+  targetX = (e.clientX - rect.left) / rect.width - 0.5;
+  targetY = (e.clientY - rect.top) / rect.height - 0.5;
+  mouseXpx = e.clientX - rect.left;
+  mouseYpx = e.clientY - rect.top;
+  hovering = true;
+});
+
+heroEl.addEventListener('mouseleave', () => {
+  hovering = false;
+  targetX = 0;
+  targetY = 0;
+});
+
+function animateHero() {
+  curX += (targetX - curX) * 0.06;
+  curY += (targetY - curY) * 0.06;
+  glowX += (mouseXpx - glowX) * 0.12;
+  glowY += (mouseYpx - glowY) * 0.12;
+  lensX += (mouseXpx - lensX) * 0.18;
+  lensY += (mouseYpx - lensY) * 0.18;
+
+  heroParallax.style.transform = `translate(${curX * -45}px, ${curY * -45}px) scale(1.05)`;
+  heroContentEl.style.transform = `perspective(1200px) rotateY(${curX * 9}deg) rotateX(${curY * -9}deg) translate(${curX * 22}px, ${curY * 16}px)`;
+
+  glow.style.left = `${glowX}px`;
+  glow.style.top = `${glowY}px`;
+  glow.style.opacity = hovering ? '1' : '0';
+
+  const heroRect = heroEl.getBoundingClientRect();
+  lens.style.left = `${lensX}px`;
+  lens.style.top = `${lensY}px`;
+  lens.style.opacity = hovering ? '1' : '0';
+  lens.style.backgroundSize = `${heroRect.width * LENS_ZOOM}px ${heroRect.height * LENS_ZOOM}px`;
+  lens.style.backgroundPosition = `${-(lensX * LENS_ZOOM - LENS_SIZE / 2)}px ${-(lensY * LENS_ZOOM - LENS_SIZE / 2)}px`;
+
+  requestAnimationFrame(animateHero);
+}
+requestAnimationFrame(animateHero);
+
+</script>
+</body>
+
+</html>
