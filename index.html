@@ -124,7 +124,7 @@ section{padding:8rem 4rem;max-width:1280px;margin:0 auto}
 .field:last-child{margin-bottom:0}
 .field label{font-size:10px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
 
-.field input,
+.field input:not([type=checkbox]),
 .field select,
 .field textarea{
   font-family:'Inter',sans-serif;
@@ -268,6 +268,12 @@ footer{border-top:0.5px solid var(--border);padding:3rem 4rem;max-width:100%}
   background:linear-gradient(135deg,rgba(255,255,255,0.45) 0%,transparent 35%,transparent 65%,rgba(255,255,255,0.1) 100%);
   mix-blend-mode:overlay;
 }
+
+
+.cta-section, .form-card, .svc-opt {
+  position: relative;
+  z-index: 10;
+}
 </style>
 </head>
 <body>
@@ -304,8 +310,8 @@ footer{border-top:0.5px solid var(--border);padding:3rem 4rem;max-width:100%}
   <div class="hero-metal-overlay"></div>
   <div class="hero-metal-bottom"></div>
   <div class="hero-glow" id="heroGlow"></div>
-  <div class="hero-lens" id="heroLens"></div>
-  <div class="hero-content">
+  
+  <div class="hero-content" id="heroContent">
     <p class="hero-eyebrow reveal">Intelligence · Software · Growth</p>
     <h1 class="hero-title reveal reveal-delay-1">We build<br><em>what moves</em><br>brands forward.</h1>
     <p class="hero-sub reveal reveal-delay-2">Custom AI systems, software, apps, and growth engines — built to perform and built to last.</p>
@@ -476,12 +482,12 @@ footer{border-top:0.5px solid var(--border);padding:3rem 4rem;max-width:100%}
           <div class="field-row">
             <div class="field" id="f-name">
               <label for="fullName">Full name</label>
-              <input type="text" id="fullName" placeholder="Rajesh Kumar" autocomplete="name">
+              <input type="text" id="fullName" placeholder="name" autocomplete="name">
               <span class="error-msg">Please enter your name</span>
             </div>
             <div class="field">
               <label for="bizName">Business name</label>
-              <input type="text" id="bizName" placeholder="Acme Ventures">
+              <input type="text" id="bizName" placeholder="business name">
             </div>
           </div>
           <div class="field-row">
@@ -647,7 +653,7 @@ const heroEl = document.querySelector('.hero');
 const heroParallax = document.getElementById('heroParallax');
 const heroContentEl = document.getElementById('heroContent');
 const glow = document.getElementById('heroGlow');
-const lens = document.getElementById('heroLens');
+
 
 let targetX = 0, targetY = 0, curX = 0, curY = 0;
 let mouseXpx = 0, mouseYpx = 0, glowX = 0, glowY = 0;
@@ -677,9 +683,7 @@ function animateHero() {
   curY += (targetY - curY) * 0.06;
   glowX += (mouseXpx - glowX) * 0.12;
   glowY += (mouseYpx - glowY) * 0.12;
-  lensX += (mouseXpx - lensX) * 0.18;
-  lensY += (mouseYpx - lensY) * 0.18;
-
+  
   heroParallax.style.transform = `translate(${curX * -45}px, ${curY * -45}px) scale(1.05)`;
   heroContentEl.style.transform = `perspective(1200px) rotateY(${curX * 9}deg) rotateX(${curY * -9}deg) translate(${curX * 22}px, ${curY * 16}px)`;
 
@@ -687,13 +691,7 @@ function animateHero() {
   glow.style.top = `${glowY}px`;
   glow.style.opacity = hovering ? '1' : '0';
 
-  const heroRect = heroEl.getBoundingClientRect();
-  lens.style.left = `${lensX}px`;
-  lens.style.top = `${lensY}px`;
-  lens.style.opacity = hovering ? '1' : '0';
-  lens.style.backgroundSize = `${heroRect.width * LENS_ZOOM}px ${heroRect.height * LENS_ZOOM}px`;
-  lens.style.backgroundPosition = `${-(lensX * LENS_ZOOM - LENS_SIZE / 2)}px ${-(lensY * LENS_ZOOM - LENS_SIZE / 2)}px`;
-
+  
   requestAnimationFrame(animateHero);
 }
 requestAnimationFrame(animateHero);
