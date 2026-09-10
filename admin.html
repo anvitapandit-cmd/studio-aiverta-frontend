@@ -154,20 +154,26 @@ let filter = 'all', search = '';
 
 async function checkPass() {
   const pass = document.getElementById('passInput').value;
+  const errEl = document.getElementById('passErr');
   try {
     const res = await fetch(`${BACKEND_URL}/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: pass })
     });
-    if (!res.ok) throw new Error();
     const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Incorrect password';
+      errEl.style.display = 'block';
+      return;
+    }
     sessionStorage.setItem('adminToken', data.token);
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     loadLeads();
   } catch {
-    document.getElementById('passErr').style.display = 'block';
+    errEl.textContent = 'Something went wrong. Try again.';
+    errEl.style.display = 'block';
   }
 }
 document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPass(); });
