@@ -148,16 +148,25 @@ tr.detail-row td{padding:0;border-bottom:1px solid var(--hairline)}
 
 <script>
 const BACKEND_URL ='https://studio-aiverta-backend-1.onrender.com';
-const ADMIN_KEY   = 'sa_admin_k9x2mq7v';
+
 let allLeads = [];
 let filter = 'all', search = '';
 
-function checkPass() {
-  if (document.getElementById('passInput').value === 'aiverta2026') {
+async function checkPass() {
+  const pass = document.getElementById('passInput').value;
+  try {
+    const res = await fetch(`${BACKEND_URL}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pass })
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    sessionStorage.setItem('adminToken', data.token);
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     loadLeads();
-  } else {
+  } catch {
     document.getElementById('passErr').style.display = 'block';
   }
 }
@@ -165,7 +174,8 @@ document.getElementById('passInput').addEventListener('keydown', e => { if (e.ke
 
 async function loadLeads() {
   try {
-    const res  = await fetch(`${BACKEND_URL}/admin/leads`, { headers: { 'x-admin-key': ADMIN_KEY } });
+    const token = sessionStorage.getItem('adminToken');
+    const res  = await fetch(`${BACKEND_URL}/admin/leads`, { headers: { 'Authorization': `Bearer ${token}` } });
     const data = await res.json();
     allLeads   = data.leads || [];
     document.getElementById('stat-total').textContent     = data.stats?.total     ?? '—';
